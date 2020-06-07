@@ -17,4 +17,13 @@ body {
     padding: 1.5rem;
     background-color: rgba(236, 252, 253, 0.5);
 }
+/* style for current-weather*/
+.mycard {
+    padding-left: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+.card-text {
+    padding-left: 1.5rem;
+}
 
