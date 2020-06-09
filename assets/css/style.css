@@ -9,6 +9,7 @@ body {
 .selector-for-some-widget {
     box-sizing: content-box;
 }
+/*header style*/
 .navbar-brand {
     font-size: 2.0rem;
 }
@@ -18,6 +19,10 @@ body {
     background-color: rgba(236, 252, 253, 0.5);
 }
 /* style for current-weather*/
+.card{
+    border: 2px solid rgba(0,0,0,.125);
+    margin-top: .50rem;
+}
 .mycard {
     padding-left: 1.5rem;
     font-size: 1.8rem;
@@ -26,4 +31,36 @@ body {
 .card-text {
     padding-left: 1.5rem;
 }
+/* UV index styles*/
+.low{
+    background-color: green;
+    color: white;
+    border-radius: 25%;
+    padding: 0.5rem;
+}
+.moderate{
+    background-color: yellow;
+    color: white;
+    border-radius: 25%;
+    padding: 0.5rem;
+}
+.high{
+    background-color: orange;
+    color: white;
+    border-radius: 25%;
+    padding: 0.5rem;
+}
+.very-high{
+    background-color: red;
+    color: white;
+    border-radius: 25%;
+    padding: 0.5rem;
+}
+.extreme{
+    background-color: violet;
+    color: white;
+    border-radius: 25%;
+    padding: 0.5rem;
+}
+/* End UV index styles */
 
