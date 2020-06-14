@@ -29,13 +29,29 @@ var currentWeather = function(data, name){
     $("#current-weather").html(`<h2 class='card-title mycard'>${Name} <span> ${day} <img src=${iconUrl}></span></h2>`)
     $("#current-weather h2").after(temp, hum, wind)
 }
-/*var getWeather =  function(apiUrl, name){
+//display 5 days forecast
+var displayForecast = function(data){
+    console.log(data);
+    var date = moment().add(1,'day').format('L');
+    console.log(date);
+    var icon = data.list[28].weather[0].icon;
+    var iconUrl = "http://openweathermap.org/img/wn/"+icon+"@2x.png";
+    var img = $('<img id="imgDay1">')
+    img.attr('src',iconUrl)
+    var temp= $("#temp1").text(`Temp: ${data.list[28].main.temp}°F`);
+    var hum = $("#hum1").text(`Humidity: ${data.list[28].main.humidity}%`);
+    $("#day1").html(`<h3 class='card-title'>${date}</h3>`)
+    $("#day1 h3").after(img, temp, hum)
+
+}
+var getForecast =  function(name){
+    var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${name}&units=imperial&appid=${appiKey}`
     fetch(apiUrl)
     .then(function(response) {
         // request was successful
         if (response.ok) {
           response.json().then(function(data) {
-            currentWeather(data, name)
+            displayForecast(data)
         });
         } else {
           alert("Error: " + response.statusText);
@@ -45,7 +61,7 @@ var currentWeather = function(data, name){
         // Notice this `.catch()` getting chained onto the end of the `.then()` method
         alert("Unable to connect with server");
     });
-}  */
+}  
 var getWeather =  function(apiUrl, name){
     fetch(apiUrl)
     .then(function(response) {
@@ -79,7 +95,6 @@ var getWeather =  function(apiUrl, name){
     })
     .catch(function(error) {
         // Notice this `.catch()` getting chained onto the end of the `.then()` method
-        console.log("UV INDEX ERROR");
         console.log(error,"UV INDEX");
         alert("Unable to connect with server");
     });        
@@ -92,6 +107,7 @@ var formSubmitHandler = function(event) {
     console.log(city);
     if (city) {
         getWeather(apiUrl,city);
+        getForecast(city);
         $("#city").val("");
     } else {
         alert("Please enter a city");
