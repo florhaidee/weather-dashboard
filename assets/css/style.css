@@ -23,7 +23,7 @@ body {
     border: 2px solid rgba(0,0,0,.125);
     margin-top: .50rem;
 }
-.mycard {
+.title {
     padding-left: 1.5rem;
     font-size: 1.8rem;
     font-weight: bold;
@@ -63,4 +63,19 @@ body {
     padding: 0.5rem;
 }
 /* End UV index styles */
-
+/*5 days forecast style start*/
+.forecast{
+    max-width: 18rem;
+    padding: 0;
+    font-size: 0.85rem;
+    justify-content: space-around;
+    padding-bottom: 0.5rem;
+}
+.forecast h3 {
+    font-size: 1.2rem;
+    padding-left: 0.5rem;
+    font-weight: bold;
+}
+.forecast p{
+    padding-left: 0.5rem;  
+}

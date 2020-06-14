@@ -26,22 +26,26 @@ var currentWeather = function(data, name){
     var temp = $("#temp").text("Temperature: " + data.main.temp + "°F");
     var hum = $("#humidity").text("Humidity: " + data.main.humidity + "%");
     var wind = $("#wind").text("Wind Speed: " + data.wind.speed + " MPH");
-    $("#current-weather").html(`<h2 class='card-title mycard'>${Name} <span> ${day} <img src=${iconUrl}></span></h2>`)
+    $("#current-weather").html(`<h2 class='card-title title'>${Name} <span> ${day} <img src=${iconUrl}></span></h2>`)
     $("#current-weather h2").after(temp, hum, wind)
 }
 //display 5 days forecast
 var displayForecast = function(data){
     console.log(data);
-    var date = moment().add(1,'day').format('L');
-    console.log(date);
-    var icon = data.list[28].weather[0].icon;
-    var iconUrl = "http://openweathermap.org/img/wn/"+icon+"@2x.png";
-    var img = $('<img id="imgDay1">')
-    img.attr('src',iconUrl)
-    var temp= $("#temp1").text(`Temp: ${data.list[28].main.temp}°F`);
-    var hum = $("#hum1").text(`Humidity: ${data.list[28].main.humidity}%`);
-    $("#day1").html(`<h3 class='card-title'>${date}</h3>`)
-    $("#day1 h3").after(img, temp, hum)
+    $('#forecast-title h4').text("5-Day Forecast:")
+    var x = 4;
+    for (var i= 1; i<=5; i++){
+        var date = moment().add(i,'day').format('L');
+        var icon = data.list[x].weather[0].icon;
+        var iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+        var img = $(`<img id="imgDay"${i}>`)
+        img.attr('src',iconUrl)
+        var temp= $(`#temp${i}`).text(`Temp: ${data.list[x].main.temp}°F`);
+        var hum = $(`#hum${i}`).text(`Humidity: ${data.list[x].main.humidity}%`);
+        $(`#day${i}`).html(`<h3 class='card-title'>${date}</h3>`)
+        $(`#day${i} h3`).after(img, temp, hum)
+        x=x+8;
+    }   
 
 }
 var getForecast =  function(name){
