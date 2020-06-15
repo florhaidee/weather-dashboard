@@ -45,7 +45,6 @@ var displayForecast = function(data){
         $(`#day${i} h3`).after(img, temp, hum)
         x=x+8;
     }   
-
 }
 var getForecast =  function(name){
     var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${name}&units=imperial&appid=${appiKey}`
@@ -74,7 +73,6 @@ var getWeather =  function(apiUrl, name){
         } else {
             alert("Please try again. Error: " + response.statusText);
         }
-        
     })
     .catch(function(error) {
         // Notice this `.catch()` getting chained onto the end of the `.then()` method
@@ -92,7 +90,6 @@ var getWeather =  function(apiUrl, name){
     })
     .then(function(data){
         getUvIndex(data)
-    
     })
     .catch(function(error) {
         // Notice this `.catch()` getting chained onto the end of the `.then()` method
@@ -106,7 +103,7 @@ var saveCities = function() {
     // loop over object properties
     $.each(cities, function (i, city) {
         var name = city.name[0].toUpperCase() + city.name.slice(1).toLowerCase();
-        $("#cities-list").append(`<button type="button" class="list-group-item list-group-item-action">${name}</button>`)
+        $("#cities-list").append(`<button type="button" class="list-group-item">${name}</button>`)
     });
 } 
 var validateRepeatCity = function (name) {
@@ -120,6 +117,14 @@ var validateRepeatCity = function (name) {
     }
     return false;
 }
+var searchHistoryHandler = function (e) {
+    e.preventDefault();
+    e.target // newly activated tab
+    var name = e.target.textContent
+    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=imperial&APPID=${appiKey}`;
+    getWeather(apiUrl,name);
+    getForecast(name);
+}
 var formSubmitHandler = function(event) {
     event.preventDefault();
     // get value from input element
@@ -129,22 +134,17 @@ var formSubmitHandler = function(event) {
     if (cityName) {
         getWeather(apiUrl,cityName);
         getForecast(cityName);
-        console.log(cities.length)
         if(cities.length >=1){
             var validate = validateRepeatCity(cityName)
-            console.log(validate)
             if( validate === false){
                 cityNameOb = { name: cityName}
                 cities.push(cityNameOb)
-                console.log(cities);
                 localStorage.setItem('city', JSON.stringify(cities))
                 saveCities();
             }
         }else if(cities.length === 0) {
-
             cityNameOb = { name: cityName}
             cities.push(cityNameOb)
-            console.log(cities);
             localStorage.setItem('city', JSON.stringify(cities))
             saveCities();
         }
@@ -152,5 +152,8 @@ var formSubmitHandler = function(event) {
         alert("Please enter a city");
     }
 };
-$(".btn").on("click", formSubmitHandler);
-saveCities();
+$(function(){
+    saveCities();
+    $('#cities-list button').on('click', searchHistoryHandler);
+    $(".btn").on("click", formSubmitHandler);
+});
