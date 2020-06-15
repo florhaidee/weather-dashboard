@@ -1,9 +1,8 @@
-var dataOb = []
+var cities = JSON.parse(localStorage.getItem('city')) || [];
 var appiKey = '03f2177cf8e0cdeb9ef1461248689ebd'
 //function to display UV index
 var getUvIndex = function(data){
     aux = data.value
-    console.log(aux);
     if(aux <=2.99){
         $("#current-weather").append("<p class='card-text'> UV Index: <span class='low'>" + data.value + "</span><p/>");
     }else if (aux <=5.99){
@@ -19,7 +18,7 @@ var getUvIndex = function(data){
 //Display Current weather
 var currentWeather = function(data, name){
     console.log(data);
-    var Name = name[0].toUpperCase() + name.slice(1);
+    var Name = name[0].toUpperCase() + name.slice(1).toLowerCase();
     var day = moment().format("L")
     var icon = data.weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/wn/"+icon+"@2x.png";
@@ -85,8 +84,6 @@ var getWeather =  function(apiUrl, name){
         currentWeather(data, name)
         var lat = data.coord.lat
         var lon = data.coord.lon
-        console.log(lat, "lat:", typeof(lat))
-        console.log("lon:", typeof(lon));
         var apiUVurl = 'http://api.openweathermap.org/data/2.5/uvi?appid='+ appiKey +'&lat='+lat+'&lon='+lon;
         return fetch(apiUVurl);
     })
@@ -103,18 +100,57 @@ var getWeather =  function(apiUrl, name){
         alert("Unable to connect with server");
     });        
 } 
+//function to search for every event saved in localStorage
+var saveCities = function() {
+    $("#cities-list").empty();
+    // loop over object properties
+    $.each(cities, function (i, city) {
+        var name = city.name[0].toUpperCase() + city.name.slice(1).toLowerCase();
+        $("#cities-list").append(`<button type="button" class="list-group-item list-group-item-action">${name}</button>`)
+    });
+} 
+var validateRepeatCity = function (name) {
+    var i=0;
+    while(i<cities.length){
+        console.log(cities[i].name, name)
+        if(cities[i].name.toUpperCase() === name.toUpperCase()){ 
+            return true; 
+        }
+        i++
+    }
+    return false;
+}
 var formSubmitHandler = function(event) {
     event.preventDefault();
     // get value from input element
-    var city = $("#city").val().trim();
-    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&APPID=${appiKey}`;
-    console.log(city);
-    if (city) {
-        getWeather(apiUrl,city);
-        getForecast(city);
-        $("#city").val("");
+    var cityName = $("#city").val().trim();
+    $("#city").val("");
+    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&APPID=${appiKey}`;
+    if (cityName) {
+        getWeather(apiUrl,cityName);
+        getForecast(cityName);
+        console.log(cities.length)
+        if(cities.length >=1){
+            var validate = validateRepeatCity(cityName)
+            console.log(validate)
+            if( validate === false){
+                cityNameOb = { name: cityName}
+                cities.push(cityNameOb)
+                console.log(cities);
+                localStorage.setItem('city', JSON.stringify(cities))
+                saveCities();
+            }
+        }else if(cities.length === 0) {
+
+            cityNameOb = { name: cityName}
+            cities.push(cityNameOb)
+            console.log(cities);
+            localStorage.setItem('city', JSON.stringify(cities))
+            saveCities();
+        }
     } else {
         alert("Please enter a city");
     }
 };
 $(".btn").on("click", formSubmitHandler);
+saveCities();
