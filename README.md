@@ -7,11 +7,11 @@ A weather dashboard that will run in the browser and feature dynamically updated
 * Is a simple application that uses a third-party API  "OpenWeather" , where the user can see the weather outlook for multiple cities
 * After user enter the city on the Input field is presented with current and future conditions for that city and that city is added to the search history
 
-![main page](./assets/images/main-page.PNG)
+![main page](./assets/images/main-page.png)
 
 * If the user wanted to search a city that is on the search history is presented again with current and future conditions for that city
 
-![Search by history](./assets/images/search-by-history.PNG)
+![Search by history](./assets/images/search-by-history.png)
 
 ## Built With
 * HTML
