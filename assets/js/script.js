@@ -16,9 +16,9 @@ var getUvIndex = function(data){
     }
 }
 //Display Current weather
-var currentWeather = function(data, name){
+var currentWeather = function(data){
     console.log(data);
-    var Name = name[0].toUpperCase() + name.slice(1).toLowerCase();
+    var Name = data.name;
     var day = moment().format("L")
     var icon = data.weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/wn/"+icon+"@2x.png";
@@ -46,6 +46,7 @@ var displayForecast = function(data){
         x=x+8;
     }   
 }
+// function that fetch forecast section
 var getForecast =  function(name){
     var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${name}&units=imperial&appid=${appiKey}`
     fetch(apiUrl)
@@ -64,6 +65,7 @@ var getForecast =  function(name){
         alert("Unable to connect with server");
     });
 }  
+// function that fetch current weather section
 var getWeather =  function(apiUrl, name){
     fetch(apiUrl)
     .then(function(response) {
@@ -79,7 +81,8 @@ var getWeather =  function(apiUrl, name){
         alert("Unable to connect with server");
     })
     .then(function(data) {
-        currentWeather(data, name)
+        currentWeather(data, data.name)
+        getForecast(data.name)
         var lat = data.coord.lat
         var lon = data.coord.lon
         var apiUVurl = 'http://api.openweathermap.org/data/2.5/uvi?appid='+ appiKey +'&lat='+lat+'&lon='+lon;
@@ -97,7 +100,7 @@ var getWeather =  function(apiUrl, name){
         alert("Unable to connect with server");
     });        
 } 
-//function to search for every event saved in localStorage
+//function to display all cities saved in localStorage
 var saveCities = function() {
     $("#cities-list").empty();
     // loop over object properties
@@ -106,6 +109,7 @@ var saveCities = function() {
         $("#cities-list").append(`<button type="button" class="list-group-item">${name}</button>`)
     });
 } 
+//function to confirm if a city is already saved on search history.
 var validateRepeatCity = function (name) {
     var i=0;
     while(i<cities.length){
@@ -117,14 +121,15 @@ var validateRepeatCity = function (name) {
     }
     return false;
 }
+// function to display weather for city on history search
 var searchHistoryHandler = function (e) {
     e.preventDefault();
     e.target // newly activated tab
     var name = e.target.textContent
     var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=imperial&APPID=${appiKey}`;
-    getWeather(apiUrl,name);
-    getForecast(name);
+    getWeather(apiUrl);
 }
+//function to display weather for city submitted on input field.
 var formSubmitHandler = function(event) {
     event.preventDefault();
     // get value from input element
@@ -132,8 +137,7 @@ var formSubmitHandler = function(event) {
     $("#city").val("");
     var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&APPID=${appiKey}`;
     if (cityName) {
-        getWeather(apiUrl,cityName);
-        getForecast(cityName);
+        getWeather(apiUrl);
         if(cities.length >=1){
             var validate = validateRepeatCity(cityName)
             if( validate === false){
@@ -153,8 +157,24 @@ var formSubmitHandler = function(event) {
     }
     $('#cities-list button').on('click', searchHistoryHandler);
 };
+//function to display current location weather when user load page
+var displayPage = function (position) {
+    var lat = position.coords.latitude
+    var lon = position.coords.longitude
+    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&APPID=${appiKey}`;
+    getWeather(apiUrl);
+}
+//function to get current user location
+var getLocation = function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(displayPage);
+    } else { 
+      alert("Geolocation is not supported by this browser. Please enter a city to display weather");
+    }
+}
 $(function(){
     saveCities();
     $('#cities-list button').on('click', searchHistoryHandler);
     $(".btn").on("click", formSubmitHandler);
 });
+getLocation();
