@@ -82,7 +82,7 @@ var getWeather =  function(apiUrl, name){
         currentWeather(data, name)
         var lat = data.coord.lat
         var lon = data.coord.lon
-        var apiUVurl = 'http://api.openweathermap.org/data/2.5/uvi?appid='+ appiKey +'&lat='+lat+'&lon='+lon;
+        var apiUVurl = `https://api.openweathermap.org/data/2.5/uvi?appid=${appiKey}&lat=${lat}&lon=${lon}`;
         return fetch(apiUVurl);
     })
     .then(function(response){
