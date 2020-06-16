@@ -24,7 +24,7 @@ A weather dashboard that will run in the browser and feature dynamically updated
 * jQuery
 * openWeatherMap
 * LocalStorage
-
+* Geolocation
 ## Website
 To visit the page go to:
 https://florhaidee.github.io/weather-dashboard/
