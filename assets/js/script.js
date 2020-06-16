@@ -151,6 +151,7 @@ var formSubmitHandler = function(event) {
     } else {
         alert("Please enter a city");
     }
+    $('#cities-list button').on('click', searchHistoryHandler);
 };
 $(function(){
     saveCities();
